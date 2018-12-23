@@ -1,0 +1,52 @@
+<div class="bookChart">
+  <% if (whichType === 'list') { %>
+    <div class="showListVersion" id="listVersion">
+      <% for (var i = 0; i < book.length; i++) { %>
+        <div class="bookWrapper">
+          <div class="imgContainer">
+            <img src=<%= book[i].image%> ></img>
+          </div>
+          <div class="textContainer">
+            <div class="row bookTitle">
+              <div> <%= book[i].title%></div>
+            </div>
+            <div class="row">
+              <div><%= book[i].pubdate%></div>
+              <div class="divider">|</div>
+              <div><%= book[i].author%></div>
+              <div class="divider">|</div>
+              <div><%= book[i].publisher%></div>
+              <div class="divider">|</div>
+              <div><%= book[i].price%>원</div>
+            </div>
+            <div class="row">
+              <div class="explanation">보러가기 : </div>
+              <a href="<%= book[i].link%>"><%= book[i].link%></a>
+            </div>
+            <div class="row">
+              <div><%= book[i].description%></div>
+            </div>
+          </div>
+        </div>
+      <% } %>
+    </div>
+  <% } else { %>
+    <div class="showCardVersion" id="cardVersion">
+      <% for (var i = 0; i < book.length; i++) { %>
+        <a class="bookWrapper_card" href="<%= book[i].link%>">
+          <div class="imgContainer">
+            <img src=<%= book[i].image%>></img>
+          </div>
+          <div class="row_card bookTitle_card">
+            <div> <%= book[i].title%></div>
+          </div>
+          <div class="row_card author_card">
+            <div>
+              <%= book[i].author%> | <%= book[i].price%>원
+            </div>
+          </div>
+        </a>
+      <% } %>
+    </div>
+  <% } %>
+</div>

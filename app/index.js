@@ -20,7 +20,8 @@ var bookInfos = [];//축적된 모든 -자료
 var infosToAdd = [];//추가적으로 받은 책 자료
 var countBookInfoReq = 0;//책자료 startIndex
 var whichType = 'list';
-var isDone = false;
+var requestedloadMore = false;
+var gotResponse = true;
 var currentScrollY = 0;
 
 var header = new Gorilla.Component(headerTemplate, {
@@ -39,7 +40,8 @@ var body = new Gorilla.Component(bodyTemplate, {
 
 header.clickByEnter = function (event) {
   var keyWord = document.querySelector('#input').value;
-  if (event.keyCode === 13 && keyWord.length >= 1 && keyWord.length <= 20) {
+  if (event.keyCode === 13 && keyWord.length >= 1 && keyWord.length <= 20 && gotResponse) {
+    gotResponse = false;
     currentScrollY = 0;
     bookInfos.length = 0;
     countBookInfoReq = 0;
@@ -50,7 +52,8 @@ header.clickByEnter = function (event) {
 
 header.clickButt = function (event) {
   var keyWord = document.querySelector('#input').value;
-  if (event.keyCode === 13 && keyWord.length >= 1 && keyWord.length <= 20) {
+  if (event.keyCode === 13 && keyWord.length >= 1 && keyWord.length <= 20 && gotResponse) {
+    gotResponse = false;
     currentScrollY = 0;
     bookInfos.length = 0;
     countBookInfoReq = 0;
@@ -67,24 +70,18 @@ header.TransformToList = function (event) {
   bookChart.whichType = 'list';
 }
 
-// body.loadMore = function (event) {
-//   var keyWord = document.querySelector('#input').value;
-//   makeRequest(keyWord);
-// }
-
 window.addEventListener('scroll', function (event) {
   var bookChart = document.querySelector('.bookChart');
-  if ( !isDone && (bookChart.offsetHeight + bookChart.offsetTop) === window.scrollY + 613) {
-    isDone = true;
-    // currentScrollY = window.scrollY;
+  if ( !requestedloadMore && (bookChart.offsetHeight + bookChart.offsetTop + 100) === window.scrollY + window.innerHeight) {
+    requestedloadMore = true;
     var keyWord = document.querySelector('#input').value;
     makeRequest(keyWord);
   }
 });
 
 bookChart.on('AFTER_RENDER', () => {
-  // window.scrollTo(0, currentScrollY);
-  isDone = false;
+  requestedloadMore = false;
+  gotResponse = true;
 });
 
 Gorilla.renderToDOM ( body, document.querySelector('#root'));
@@ -95,13 +92,23 @@ function listUp (infoList) {
 
 function infoModifier () {
   console.log('*****infoModifier*****');
+  console.log('bookInfos: ', bookInfos);
   for (var i = 0; i < urlList.length; i++) {
-    bookInfos[i + (12 * (countBookInfoReq-1))]['link'] = urlList[i].url;
+    var oldDescription = bookInfos[i + (20 * (countBookInfoReq-1))].description;
+    var oldTitle = bookInfos[i + (20 * (countBookInfoReq-1))].title;
+    var oldImage = bookInfos[i + (20 * (countBookInfoReq-1))].image;
 
-    if (bookInfos[i + (12 * (countBookInfoReq - 1))].description.length > 50) {
-      var allDescription = bookInfos[i + (12 * (countBookInfoReq - 1))].description;
-      bookInfos[i + (12 * (countBookInfoReq - 1))].description = allDescription.split('').slice(0, 50).join('');
+    bookInfos[i + (20 * (countBookInfoReq-1))]['link'] = urlList[i].url;
+    oldDescription = oldDescription.replace(/<b>/g, '');
+    oldDescription = oldDescription.replace(/<\/b>/g, '');
+    if (oldDescription.length) {
+      oldDescription = oldDescription.slice(0,50) + "...";
     }
+    bookInfos[i + (20 * (countBookInfoReq-1))].description = oldDescription;
+    oldTitle = oldTitle.replace(/<b>/g, '');
+    oldTitle = oldTitle.replace(/<\/b>/g, '');
+    bookInfos[i + (20 * (countBookInfoReq-1))].title = oldTitle;
+    // if (oldImage)
   }
 
   var listVersion = document.querySelector('#listversion');
@@ -128,11 +135,11 @@ function makeRequest (keyWord) {
         bookInfos = bookInfos.concat(JSON.parse(req.responseText).items);
         playURLShortner(JSON.parse(req.responseText).items);
       } else {
-        console.log("Error loading page\n");
+        console.log("Error loading infos...");
       }
     }
   };
-  req.open('GET', `http://localhost:3000/v1/search/book/?query=${keyWord}&display=12&start=${1+(12 * countBookInfoReq)}`, true);
+  req.open('GET', `http://localhost:3000/v1/search/book/?query=${keyWord}&display=20&start=${1+(20 * countBookInfoReq)}`, true);
   req.send();
   req.onreadystatechange();
 }

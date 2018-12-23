@@ -3,8 +3,8 @@
     <div class="showListVersion" id="listVersion">
       <% for (var i = 0; i < book.length; i++) { %>
         <div class="bookWrapper">
-          <div class="imgContainer">
-            <img src=<%= book[i].image%> ></img>
+          <div class="imgContainer_list">
+            <img src=<%= book[i].image%> onerror="this.src='/../assets/images/dummyImage.png'"></img>
           </div>
           <div class="textContainer">
             <div class="row bookTitle">

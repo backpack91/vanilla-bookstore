@@ -1,10 +1,10 @@
-<div class="bookChart">
-  <% if (whichType === 'list') { %>
+<div class="bookChartAfterSearch" id="bookChart">
+  <% if (chartType === 'list') { %>
     <div class="showListVersion" id="listVersion">
       <% for (var i = 0; i < book.length; i++) { %>
         <div class="bookWrapper">
           <div class="imgContainer_list">
-            <img src=<%= book[i].image%> onerror="this.src='/../assets/images/dummyImage.png'"></img>
+            <img src="<%= book[i].image%>" onerror='this.src="/assets/images/dummyImage.png"'></img>
           </div>
           <div class="textContainer">
             <div class="row bookTitle">
@@ -35,7 +35,7 @@
       <% for (var i = 0; i < book.length; i++) { %>
         <a class="bookWrapper_card" href="<%= book[i].link%>">
           <div class="imgContainer">
-            <img src=<%= book[i].image%>></img>
+            <img src="<%= book[i].image%>" onerror='this.src="/assets/images/dummyImage.png"'></img>
           </div>
           <div class="row_card bookTitle_card">
             <div> <%= book[i].title%></div>

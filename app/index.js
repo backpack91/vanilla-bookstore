@@ -42,7 +42,7 @@ body.topButt = function (event) {
     top: 0,
     behavior: 'smooth'
   });
-}
+};
 
 header.clickByEnter = function (event) {
   var keyWord = document.querySelector('#input').value;
@@ -56,7 +56,7 @@ header.clickByEnter = function (event) {
     document.querySelector('#title').classList.remove('title');
     document.querySelector('#title').classList.add('titleAfterSearch');
   }
-}
+};
 
 header.clickButt = function (event) {
   var keyWord = document.querySelector('#input').value;
@@ -68,15 +68,15 @@ header.clickButt = function (event) {
     document.querySelector('#header').classList.add('headerAfterSearch');
     document.querySelector('#title').classList.remove('title');
     document.querySelector('#title').classList.add('titleAfterSearch');
-}
+};
 
 header.TransformToCard = function (event) {
   bookChart.chartType = 'card';
-}
+};
 
 header.TransformToList = function (event) {
   bookChart.chartType = 'list';
-}
+};
 
 window.addEventListener('scroll', function (event) {
   var bookChart = document.querySelector('#bookChart');

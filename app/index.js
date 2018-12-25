@@ -60,14 +60,14 @@ header.clickByEnter = function (event) {
 
 header.clickButt = function (event) {
   var keyWord = document.querySelector('#input').value;
-    gotResponse = false;
-    bookInfoStorage.length = 0;
-    countForBookInfoReq = 0;
-    makeRequest(keyWord);
-    document.querySelector('#header').classList.remove('header');
-    document.querySelector('#header').classList.add('headerAfterSearch');
-    document.querySelector('#title').classList.remove('title');
-    document.querySelector('#title').classList.add('titleAfterSearch');
+  gotResponse = false;
+  bookInfoStorage.length = 0;
+  countForBookInfoReq = 0;
+  makeRequest(keyWord);
+  document.querySelector('#header').classList.remove('header');
+  document.querySelector('#header').classList.add('headerAfterSearch');
+  document.querySelector('#title').classList.remove('title');
+  document.querySelector('#title').classList.add('titleAfterSearch');
 };
 
 header.TransformToCard = function (event) {
@@ -77,6 +77,18 @@ header.TransformToCard = function (event) {
 header.TransformToList = function (event) {
   bookChart.chartType = 'list';
 };
+
+bookChart.on('AFTER_RENDER', () => {
+  requestedloadMore = false;
+  gotResponse = true;
+  if (isFirstRender) {
+    document.querySelector('#bookChart').classList.remove('bookChartAfterSearch');
+    document.querySelector('#bookChart').classList.add('bookChart');
+    isFirstRender = false;
+  } else {
+    document.querySelector('#bookChart').style.margin = '20px 0 100px 0';
+  }
+});
 
 window.addEventListener('scroll', function (event) {
   var bookChart = document.querySelector('#bookChart');
@@ -91,18 +103,6 @@ window.addEventListener('scroll', function (event) {
     topButt.classList.remove('hide');
   } else if (window.scrollY <= 500 && !topButt.classList.contains('hide')){
     topButt.classList.add('hide');
-  }
-});
-
-bookChart.on('AFTER_RENDER', () => {
-  requestedloadMore = false;
-  gotResponse = true;
-  if (isFirstRender) {
-    document.querySelector('#bookChart').classList.remove('bookChartAfterSearch');
-    document.querySelector('#bookChart').classList.add('bookChart');
-    isFirstRender = false;
-  } else {
-    document.querySelector('#bookChart').style.margin = '20px 0 100px 0';
   }
 });
 

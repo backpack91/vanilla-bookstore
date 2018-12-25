@@ -46,6 +46,7 @@ body.topButt = function (event) {
 
 header.clickByEnter = function (event) {
   var keyWord = document.querySelector('#input').value;
+  
   if (event.keyCode === 13 && keyWord.length >= 1 && keyWord.length <= 20 && gotResponse) {
     gotResponse = false;
     bookInfoStorage.length = 0;
@@ -60,6 +61,7 @@ header.clickByEnter = function (event) {
 
 header.clickButt = function (event) {
   var keyWord = document.querySelector('#input').value;
+
   gotResponse = false;
   bookInfoStorage.length = 0;
   countForBookInfoReq = 0;
@@ -138,6 +140,7 @@ function playURLShortner (infoList) {
 
 function makeRequest (keyWord) {
   var req = new XMLHttpRequest();
+
   req.onreadystatechange = function () {
     if (req.readyState === 4) {
       if(req.status === 200) {
@@ -162,6 +165,7 @@ function makeRequest (keyWord) {
 
 function shortURLRequest (url) {
   var req = new XMLHttpRequest();
+
   req.onreadystatechange = function (url) {
     if (req.readyState === 4) {
       if(req.status === 200) {

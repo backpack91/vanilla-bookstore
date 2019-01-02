@@ -1,4 +1,4 @@
-countForBookInfoReq// Load application styles
+// Load application styles
 import 'styles/index.less';
 
 // ================================
@@ -13,59 +13,66 @@ import bodyTemplate from 'body.ejs';
 
 import Gorilla from '../Gorilla';
 
-var countForURLReq = 0;
-var shortenedUrlList = [];
-var bookInfoStorage = [];
-var infosToAdd = [];
-var countForBookInfoReq = 0;
-var chartType = 'list';
-var requestedloadMore = false;
-var gotResponse = true;
-var isFirstRender = true;
+let countForURLReq = 0;
+const shortenedUrlList = [];
+let bookInfoStorage = [];
+let infosToAdd = [];
+let countForBookInfoReq = 0;
+let chartType = 'list';
+let requestedloadMore = false;
+let gotResponse = true;
+let isFirstRender = true;
 
-var header = new Gorilla.Component(headerTemplate, {
+const header = new Gorilla.Component(headerTemplate, {
+  headerClass: 'header',
+  titleClass: 'title'
 });
 
-var bookChart = new Gorilla.Component(bookChartTemplate, {
+const bookChart = new Gorilla.Component(bookChartTemplate, {
   book: [],
-  chartType: chartType
+  chartType,
+  bookChartClass: 'bookChartAfterSearch'
 });
 
-var body = new Gorilla.Component(bodyTemplate, {
+const body = new Gorilla.Component(bodyTemplate, {
 }, {
   header,
   bookChart
 });
 
-body.topButt = function (event) {
+body.topBtn = function (event) {
   scrollTo({
     top: 0,
     behavior: 'smooth'
   });
 };
 
-header.clickByEnter = function (event) {
-  var keyWord = document.querySelector('#input').value;
-  
+header.onSearchSubmit = function (event) {
+  const keyWord = document.querySelector('#input').value;
+
   if (event.keyCode === 13 && keyWord.length >= 1 && keyWord.length <= 20 && gotResponse) {
     gotResponse = false;
     bookInfoStorage.length = 0;
     countForBookInfoReq = 0;
     makeRequest(keyWord);
-    document.querySelector('#header').classList.remove('header');
-    document.querySelector('#header').classList.add('headerAfterSearch');
-    document.querySelector('#title').classList.remove('title');
-    document.querySelector('#title').classList.add('titleAfterSearch');
+    header.headerShape = 'headerAfterSearch';
+    header.titleShape = 'titleAfterSearch';
+    // document.querySelector('#header').classList.remove('header');
+    // document.querySelector('#header').classList.add('headerAfterSearch');
+    // document.querySelector('#title').classList.remove('title');
+    // document.querySelector('#title').classList.add('titleAfterSearch');
   }
 };
 
-header.clickButt = function (event) {
-  var keyWord = document.querySelector('#input').value;
+header.onSearchBtnClick = function (event) {
+  const keyWord = document.querySelector('#input').value;
 
   gotResponse = false;
   bookInfoStorage.length = 0;
   countForBookInfoReq = 0;
   makeRequest(keyWord);
+  // header.headerShape = 'headerAfterSearch';
+  // header.titleShape = 'titleAfterSearch';
   document.querySelector('#header').classList.remove('header');
   document.querySelector('#header').classList.add('headerAfterSearch');
   document.querySelector('#title').classList.remove('title');
@@ -92,33 +99,47 @@ bookChart.on('AFTER_RENDER', () => {
   }
 });
 
+// bookChart.on('AFTER_RENDER', () => {
+//   requestedloadMore = false;
+//   gotResponse = true;
+//   if (isFirstRender) {
+//     bookChart.bookChartClass = 'bookChart';
+//     isFirstRender = false;
+//   } else {
+//     bookChart.bookChartClass = 'bookChartAfterSearch'
+//     // document.querySelector('#bookChart').style.margin = '20px 0 100px 0';
+//   }
+// });
+
 window.addEventListener('scroll', function (event) {
-  var bookChart = document.querySelector('#bookChart');
-  var topButt = document.querySelector('.topButt');
+  const bookChart = document.querySelector('#bookChart');
+  const topBtn = document.querySelector('.topBtn');
+  const keyWord = document.querySelector('#input').value;
 
   if ( !requestedloadMore && (bookChart.offsetHeight + bookChart.offsetTop + 100) === window.scrollY + window.innerHeight) {
     requestedloadMore = true;
-    var keyWord = document.querySelector('#input').value;
     makeRequest(keyWord);
   }
-  if (window.scrollY >500 && topButt.classList.contains('hide')) {
-    topButt.classList.remove('hide');
-  } else if (window.scrollY <= 500 && !topButt.classList.contains('hide')){
-    topButt.classList.add('hide');
+  if (window.scrollY >500 && topBtn.classList.contains('hide')) {
+    topBtn.classList.remove('hide');
+  } else if (window.scrollY <= 500 && !topBtn.classList.contains('hide')){
+    topBtn.classList.add('hide');
   }
 });
 
-Gorilla.renderToDOM ( body, document.querySelector('#root'));
+Gorilla.renderToDOM (body, document.querySelector('#root'));
 
 function listUp (infoList) {
   bookChart.book = infoList;
 }
 
 function infoModifier () {
-  for (var i = 0; i < shortenedUrlList.length; i++) {
-    var oldDescription = bookInfoStorage[i + (20 * (countForBookInfoReq-1))].description;
-    var oldTitle = bookInfoStorage[i + (20 * (countForBookInfoReq-1))].title;
-    var oldImage = bookInfoStorage[i + (20 * (countForBookInfoReq-1))].image;
+  //kdfj;gdlkgj;sdflkj;sdflkgj;sdlfkgdsl
+  //dfgdsg
+  for (let i = 0; i < shortenedUrlList.length; i++) {
+    let oldDescription = bookInfoStorage[i + (20 * (countForBookInfoReq-1))].description;
+    let oldTitle = bookInfoStorage[i + (20 * (countForBookInfoReq-1))].title;
+    let oldImage = bookInfoStorage[i + (20 * (countForBookInfoReq-1))].image;
 
     bookInfoStorage[i + (20 * (countForBookInfoReq-1))]['link'] = shortenedUrlList[i].url;
     oldDescription = oldDescription.replace(/<b>/g, '');
@@ -139,7 +160,7 @@ function playURLShortner (infoList) {
 }
 
 function makeRequest (keyWord) {
-  var req = new XMLHttpRequest();
+  const req = new XMLHttpRequest();
 
   req.onreadystatechange = function () {
     if (req.readyState === 4) {
@@ -164,7 +185,7 @@ function makeRequest (keyWord) {
 }
 
 function shortURLRequest (url) {
-  var req = new XMLHttpRequest();
+  const req = new XMLHttpRequest();
 
   req.onreadystatechange = function (url) {
     if (req.readyState === 4) {

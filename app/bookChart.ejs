@@ -1,4 +1,8 @@
-<div class=<%=bookChartClass === 'bookChart' ? 'bookChart' : 'bookChartAfterSearch'%>  id="bookChart">
+<% if (isFirstRender) { %>
+<div class='bookChart' id="bookChart">
+<% } else { %>
+<div class=<%=bookChartClass%>  id="bookChart" style="margin: 20px 0 100px 0;">
+<% } %>
   <% if (chartType === 'list') { %>
     <div class="showListVersion" id="listVersion">
       <% for (var i = 0; i < book.length; i++) { %>

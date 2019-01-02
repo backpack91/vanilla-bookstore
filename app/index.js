@@ -31,7 +31,8 @@ const header = new Gorilla.Component(headerTemplate, {
 const bookChart = new Gorilla.Component(bookChartTemplate, {
   book: [],
   chartType,
-  bookChartClass: 'bookChartAfterSearch'
+  bookChartClass: 'bookChartAfterSearch',
+  isFirstRender: true
 });
 
 const body = new Gorilla.Component(bodyTemplate, {
@@ -55,12 +56,11 @@ header.onSearchSubmit = function (event) {
     bookInfoStorage.length = 0;
     countForBookInfoReq = 0;
     makeRequest(keyWord);
-    header.headerShape = 'headerAfterSearch';
-    header.titleShape = 'titleAfterSearch';
-    // document.querySelector('#header').classList.remove('header');
-    // document.querySelector('#header').classList.add('headerAfterSearch');
-    // document.querySelector('#title').classList.remove('title');
-    // document.querySelector('#title').classList.add('titleAfterSearch');
+    document.querySelector('#header').classList.remove('header');
+    document.querySelector('#header').classList.add('headerAfterSearch');
+    document.querySelector('#title').classList.remove('title');
+    document.querySelector('#title').classList.add('titleAfterSearch');
+    bookChart.isFirstRender = false;
   }
 };
 
@@ -71,12 +71,8 @@ header.onSearchBtnClick = function (event) {
   bookInfoStorage.length = 0;
   countForBookInfoReq = 0;
   makeRequest(keyWord);
-  // header.headerShape = 'headerAfterSearch';
-  // header.titleShape = 'titleAfterSearch';
-  document.querySelector('#header').classList.remove('header');
-  document.querySelector('#header').classList.add('headerAfterSearch');
-  document.querySelector('#title').classList.remove('title');
-  document.querySelector('#title').classList.add('titleAfterSearch');
+  header.headerClass = 'headerAfterSearch';
+  header.titleClass = 'titleAfterSearch';
 };
 
 header.TransformToCard = function (event) {
@@ -90,26 +86,7 @@ header.TransformToList = function (event) {
 bookChart.on('AFTER_RENDER', () => {
   requestedloadMore = false;
   gotResponse = true;
-  if (isFirstRender) {
-    document.querySelector('#bookChart').classList.remove('bookChartAfterSearch');
-    document.querySelector('#bookChart').classList.add('bookChart');
-    isFirstRender = false;
-  } else {
-    document.querySelector('#bookChart').style.margin = '20px 0 100px 0';
-  }
 });
-
-// bookChart.on('AFTER_RENDER', () => {
-//   requestedloadMore = false;
-//   gotResponse = true;
-//   if (isFirstRender) {
-//     bookChart.bookChartClass = 'bookChart';
-//     isFirstRender = false;
-//   } else {
-//     bookChart.bookChartClass = 'bookChartAfterSearch'
-//     // document.querySelector('#bookChart').style.margin = '20px 0 100px 0';
-//   }
-// });
 
 window.addEventListener('scroll', function (event) {
   const bookChart = document.querySelector('#bookChart');
@@ -134,8 +111,6 @@ function listUp (infoList) {
 }
 
 function infoModifier () {
-  //kdfj;gdlkgj;sdflkj;sdflkgj;sdlfkgdsl
-  //dfgdsg
   for (let i = 0; i < shortenedUrlList.length; i++) {
     let oldDescription = bookInfoStorage[i + (20 * (countForBookInfoReq-1))].description;
     let oldTitle = bookInfoStorage[i + (20 * (countForBookInfoReq-1))].title;

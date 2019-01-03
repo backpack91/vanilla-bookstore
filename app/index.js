@@ -114,7 +114,6 @@ function infoModifier () {
   for (let i = 0; i < shortenedUrlList.length; i++) {
     let oldDescription = bookInfoStorage[i + (20 * (countForBookInfoReq-1))].description;
     let oldTitle = bookInfoStorage[i + (20 * (countForBookInfoReq-1))].title;
-    let oldImage = bookInfoStorage[i + (20 * (countForBookInfoReq-1))].image;
 
     bookInfoStorage[i + (20 * (countForBookInfoReq-1))]['link'] = shortenedUrlList[i].url;
     oldDescription = oldDescription.replace(/<b>/g, '');

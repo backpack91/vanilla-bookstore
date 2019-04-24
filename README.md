@@ -1,5 +1,9 @@
 # Vanilla Bookstore
 
+![](assets/GIFfiles/vanilla-book-store_1.gif)
+
+![](assets/GIFfiles/vanilla-book-store_2.gif)
+
 # Introduction
 
 ## Setup
